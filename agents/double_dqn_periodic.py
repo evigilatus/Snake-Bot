@@ -172,7 +172,7 @@ class DoubleDQNPeriodicAgent(object):
             self.target_model.fit(state.reshape((1, 11)), target_f, epochs=1, verbose=0)
 
 
-    def run(self, game):
+    def run(self, mode_file):
         pygame.init()
         counter_games = 0
         score_plot = []
@@ -180,10 +180,12 @@ class DoubleDQNPeriodicAgent(object):
         record = 0
         while counter_games < 500:
             # Initialize classes
+            game = Game(440, 440, mode_file)
             player1 = game.player
             food1 = game.food
 
             # Perform first move
+            game = Game(440, 440, mode_file)
             initialize_game(player1, game, food1, self)
             if game_settings['display_option']:
                 display(player1, food1, game, record)

@@ -218,7 +218,7 @@ class DuelingDQNAgent(object):
         target_f[np.argmax(action)] = target
         self.model.fit({'state':np.array([state])}, {'value':value, 'advantages':target_f.reshape(1,3)}, epochs=1, verbose=0)
 
-    def run(self, game):
+    def run(self, mode_file):
         pygame.init()
         counter_games = 0
         score_plot = []
@@ -226,6 +226,7 @@ class DuelingDQNAgent(object):
         record = 0
         while counter_games < 150:
             # Initialize classes
+            game = Game(440, 440, mode_file)
             player1 = game.player
             food1 = game.food
 

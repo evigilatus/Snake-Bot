@@ -163,7 +163,7 @@ class ExperienceReplayDQNAgent(object):
         target_f[0][np.argmax(action)] = target
         self.model.fit(state.reshape((1, 11)), target_f, epochs=1, verbose=0)
 
-    def run(self, game):
+    def run(self, mode_file):
         pygame.init()
         counter_games = 0
         score_plot = []
@@ -171,6 +171,7 @@ class ExperienceReplayDQNAgent(object):
         record = 0
         while counter_games < 200:
             # Initialize classes
+            game = Game(440, 440, mode_file)
             player1 = game.player
             food1 = game.food
 

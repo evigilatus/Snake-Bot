@@ -29,10 +29,9 @@ def main(algorithm, mode, graphics, weights_path):
     init_settings(graphics, weights_path)
     agent = select_algorithm(algorithm)
     mode_file = select_mode(mode)
-    game = Game(440, 440, mode_file)
 
     print(f"Running {algorithm} agent for solving the game 'Snake' in {mode} mode...")
-    agent.run(game)
+    agent.run(mode_file)
 
 
 def init_settings(graphics, weights_path):
