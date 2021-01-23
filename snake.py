@@ -1,7 +1,7 @@
-from game_helper import *
+from game_initializer import *
 
 
-class Player(object):
+class Snake(object):
 
     def __init__(self, game):
         x = 0.45 * game.game_width
@@ -12,7 +12,7 @@ class Player(object):
         self.position.append([self.x, self.y])
         self.food = 1
         self.eaten = False
-        #self.image = pygame.image.load('img/snakeBody.png')
+        self.image = pygame.image.load('game_modes/img/snakeBody.png')
         self.x_change = 20
         self.y_change = 0
 
@@ -24,7 +24,7 @@ class Player(object):
             self.position[-1][0] = x
             self.position[-1][1] = y
 
-    def do_move(self, move, x, y, game, food,agent):
+    def do_move(self, move, x, y, game, food, agent):
         move_array = [self.x_change, self.y_change]
 
         if self.eaten:
@@ -59,7 +59,7 @@ class Player(object):
         if game.crash == False:
             for i in range(food):
                 x_temp, y_temp = self.position[len(self.position) - 1 - i]
-                #game.gameDisplay.blit(self.image, (x_temp, y_temp))
+                game.gameDisplay.blit(self.image, (x_temp, y_temp))
 
             update_screen()
         else:
