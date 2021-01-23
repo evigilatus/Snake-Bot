@@ -1,5 +1,9 @@
 from random import randint
+
 import pygame
+
+from game_initializer import update_screen
+from settings import game_settings
 
 
 class Food(object):
@@ -7,7 +11,8 @@ class Food(object):
     def __init__(self):
         self.x_food = 240
         self.y_food = 200
-        #self.image = pygame.image.load('img/food2.png')
+        if game_settings['display_option']:
+            self.image = pygame.image.load('game_modes/img/food2.png')
 
     def food_coord(self, game, player):
         x_rand = randint(20, game.game_width - 40)
@@ -19,10 +24,9 @@ class Food(object):
         else:
             self.food_coord(game,player)
 
-
     def display_food(self, x, y, game):
         game.gameDisplay.blit(self.image, (x, y))
-        self.update_screen()
+        update_screen()
 
 
 

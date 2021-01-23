@@ -7,7 +7,8 @@ from operator import add
 from random import randint
 from keras.utils import to_categorical
 from game import Game
-from game_helper import *
+from game_initializer import *
+from settings import game_settings
 
 
 class ExperienceReplayDQNAgent(object):
@@ -148,7 +149,7 @@ class ExperienceReplayDQNAgent(object):
 
             # Perform first move
             initialize_game(player1, game, food1, self)
-            if display_option:
+            if game_settings['display_option']:
                 display(player1, food1, game, record)
 
             while not game.crash:
@@ -179,9 +180,9 @@ class ExperienceReplayDQNAgent(object):
                 # store the new data into a long term memory
                 self.remember(state_old, final_move, reward, state_new, game.crash)
                 record = get_record(game.score, record)
-                if display_option:
+                if game_settings['display_option']:
                     display(player1, food1, game, record)
-                    pygame.time.wait(speed)
+                    pygame.time.wait(game_settings['speed'])
 
             self.replay_new(self.memory)
             counter_games += 1

@@ -3,10 +3,6 @@ import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Set options to activate or deactivate the game view, and its speed
-display_option = False
-speed = 0
-pygame.font.init()
 
 def eat(player, food, game):
     if player.x == food.x_food and player.y == food.y_food:

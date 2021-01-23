@@ -1,11 +1,8 @@
 import pygame
-from player import Player
-from food import Food
 
-# Set options to activate or deactivate the game view, and its speed
-display_option = False
-speed = 0
-pygame.font.init()
+from snake import Snake
+from food import Food
+from settings import game_settings
 
 
 class Game:
@@ -14,9 +11,12 @@ class Game:
         pygame.display.set_caption('SnakeGen')
         self.game_width = game_width
         self.game_height = game_height
-        # self.gameDisplay = pygame.display.set_mode((game_width, game_height+60))
-        #self.bg = pygame.image.load("img/background.png")
+
+        if game_settings['display_option']:
+            self.gameDisplay = pygame.display.set_mode((game_width, game_height+60))
+            self.bg = pygame.image.load("game_modes/img/background.png")
+
         self.crash = False
-        self.player = Player(self)
+        self.player = Snake(self)
         self.food = Food()
         self.score = 0
