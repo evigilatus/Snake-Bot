@@ -3,25 +3,18 @@ from keras.models import Sequential
 from keras.models import Model
 from keras.layers import Dense, Input, Dropout
 import random
-import pandas as pd
-from operator import add
 from random import randint
+from agents.dqn_agent import DQNAgent
 from keras.utils import to_categorical
 from game import Game
 from game_initializer import *
 from utils.settings import game_settings
 
 
-class DuelingDQNAgent(object):
+class DuelingDQNAgent(DQNAgent):
 
     def __init__(self):
-        self.reward = 0
-        self.gamma = 0.9
-        self.dataframe = pd.DataFrame()
-        self.short_memory = np.array([])
-        self.agent_target = 1
-        self.agent_predict = 0
-        self.learning_rate = 0.0005
+        super().__init__()
         self.feature_model = self.feature_network()
         self.value_model = self.value_network()
         self.advantage_model = self.advantage_network()
@@ -29,105 +22,6 @@ class DuelingDQNAgent(object):
         if game_settings['weights_path'] is not None:
             print("Using pretrained network weights from {}", game_settings['weights_path'])
             self.model.load_weights(game_settings['weights_path'])
-        self.epsilon = 0
-        self.actual = []
-        self.memory = []
-
-    def get_state(self, game, player, food):
-
-        state = [
-            # Danger straight
-            (player.x_change == 20 and player.y_change == 0 and (
-                    (list(map(add, player.position[-1], [20, 0])) in player.position) or
-                    player.position[-1][0] + 20 >= (game.game_width - 20) or
-                    (list(map(add, player.position[-1], [20, 0])) in game.barrierPositions)
-            )) or
-            (player.x_change == -20 and player.y_change == 0 and (
-                    (list(map(add, player.position[-1], [-20, 0])) in player.position) or
-                    player.position[-1][0] - 20 < 20 or
-                    (list(map(add, player.position[-1], [-20, 0])) in game.barrierPositions)
-            )) or
-            (player.x_change == 0 and player.y_change == -20 and (
-                    (list(map(add, player.position[-1], [0, -20])) in player.position) or
-                    player.position[-1][-1] - 20 < 20 or
-                    (list(map(add, player.position[-1], [0, -20])) in game.barrierPositions)
-            )) or
-            (player.x_change == 0 and player.y_change == 20 and (
-                    (list(map(add, player.position[-1], [0, 20])) in player.position) or
-                    player.position[-1][-1] + 20 >= (game.game_height-20) or
-                    (list(map(add, player.position[-1], [0, 20])) in game.barrierPositions)
-            )),
-
-            # Danger right
-            (player.x_change == 0 and player.y_change == -20 and (
-                    (list(map(add,player.position[-1],[20, 0])) in player.position) or
-                    player.position[ -1][0] + 20 > (game.game_width-20) or
-                    (list(map(add, player.position[-1], [20, 0])) in game.barrierPositions)
-            )) or
-            (player.x_change == 0 and player.y_change == 20 and (
-                    (list(map(add,player.position[-1], [-20,0])) in player.position) or
-                    player.position[-1][0] - 20 < 20 or
-                    (list(map(add, player.position[-1], [-20, 0])) in game.barrierPositions)
-            )) or
-            (player.x_change == -20 and player.y_change == 0 and (
-                    (list(map(add ,player.position[-1],[0,-20])) in player.position) or
-                    player.position[-1][-1] - 20 < 20 or
-                    (list(map(add, player.position[-1], [0, -20])) in game.barrierPositions)
-            )) or
-            (player.x_change == 20 and player.y_change == 0 and (
-                    (list(map(add,player.position[-1],[0,20])) in player.position) or
-                    player.position[-1][-1] + 20 >= (game.game_height-20) or
-                    (list(map(add, player.position[-1], [-20, 0])) in game.barrierPositions)
-            )),
-
-            # Danger left
-            (player.x_change == 0 and player.y_change == 20 and (
-                    (list(map(add,player.position[-1],[20,0])) in player.position) or
-                    player.position[-1][0] + 20 > (game.game_width-20) or
-                    (list(map(add, player.position[-1], [20, 0])) in game.barrierPositions)
-            )) or
-            (player.x_change == 0 and player.y_change == -20 and (
-                    (list(map(add, player.position[-1],[-20,0])) in player.position) or
-                    player.position[-1][0] - 20 < 20 or
-                    (list(map(add, player.position[-1], [-20, 0])) in game.barrierPositions)
-            )) or
-            (player.x_change == 20 and player.y_change == 0 and (
-                    (list(map(add,player.position[-1],[0,-20])) in player.position) or
-                    player.position[-1][-1] - 20 < 20 or
-                    (list(map(add, player.position[-1], [0, -20])) in game.barrierPositions)
-            )) or
-            (player.x_change == -20 and player.y_change == 0 and (
-                    (list(map(add,player.position[-1],[0,20])) in player.position) or
-                    player.position[-1][-1] + 20 >= (game.game_height-20) or
-                    (list(map(add, player.position[-1], [0, 20])) in game.barrierPositions)
-            )),
-
-            player.x_change == -20,  # move left
-            player.x_change == 20,  # move right
-            player.y_change == -20,  # move up
-            player.y_change == 20,  # move down
-            food.x_food < player.x,  # food left
-            food.x_food > player.x,  # food right
-            food.y_food < player.y,  # food up
-            food.y_food > player.y  # food down
-            ]
-
-        for i in range(len(state)):
-            if state[i]:
-                state[i]=1
-            else:
-                state[i]=0
-
-        return np.asarray(state)
-
-    def set_reward(self, player, crash):
-        self.reward = 0
-        if crash:
-            self.reward = -10
-            return self.reward
-        if player.eaten:
-            self.reward = 10
-        return self.reward
 
     def network(self, weights=None):
         state = Input(shape=(11,), name='state')
