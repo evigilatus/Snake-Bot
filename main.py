@@ -3,6 +3,7 @@ import click
 import pygame
 from agents.dueling_dqn import DuelingDQNAgent
 from agents.experience_replay_dqn import ExperienceReplayDQNAgent
+from agents.double_dqn_periodic import DoubleDQNPeriodicAgent
 from settings import game_settings
 
 
@@ -28,8 +29,7 @@ def main(algorithm, mode, graphics):
         agent = ExperienceReplayDQNAgent()
     elif algorithm == 'double_dqn':
         print("Running experiments with DoubleDQN")
-        # TODO: Fix it with the correct double DQN agent!
-        agent = DuelingDQNAgent()
+        agent = DoubleDQNPeriodicAgent()
     elif algorithm == 'dueling_dqn':
         print("Running experiments with DuelingDQN")
         agent = DuelingDQNAgent()
