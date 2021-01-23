@@ -8,7 +8,7 @@ from random import randint
 from keras.utils import to_categorical
 from game import Game
 from game_initializer import *
-from settings import game_settings
+from utils.settings import game_settings
 
 class DoubleDQNPeriodicAgent(object):
 

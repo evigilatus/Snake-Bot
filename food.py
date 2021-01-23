@@ -1,9 +1,8 @@
 from random import randint
-
 import pygame
 
 from game_initializer import update_screen
-from settings import game_settings
+from utils.settings import game_settings
 
 
 class Food(object):

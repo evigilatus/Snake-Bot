@@ -4,7 +4,7 @@ import pygame
 from agents.dueling_dqn import DuelingDQNAgent
 from agents.experience_replay_dqn import ExperienceReplayDQNAgent
 from agents.double_dqn_periodic import DoubleDQNPeriodicAgent
-from settings import game_settings
+from utils.settings import game_settings
 
 
 @click.group(invoke_without_command=True)
@@ -25,13 +25,10 @@ def main(algorithm, mode, graphics):
     # TODO: Add wall/maze logic
 
     if algorithm == 'experience_replay_dqn':
-        print("Running experiments with ExperienceReplayDQNAgent")
         agent = ExperienceReplayDQNAgent()
     elif algorithm == 'double_dqn':
-        print("Running experiments with DoubleDQN")
         agent = DoubleDQNPeriodicAgent()
     elif algorithm == 'dueling_dqn':
-        print("Running experiments with DuelingDQN")
         agent = DuelingDQNAgent()
     else:
         # TODO: Choose default agent

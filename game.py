@@ -2,7 +2,7 @@ import pygame
 
 from snake import Snake
 from food import Food
-from settings import game_settings
+from utils.settings import game_settings
 
 
 class Game:

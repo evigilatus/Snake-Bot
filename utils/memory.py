@@ -1,6 +1,6 @@
 import numpy as np
 
-from agents.sum_tree import SumTree
+from utils.sum_tree import SumTree
 
 
 # from https://github.com/simoninithomas/Deep_reinforcement_learning_Course
