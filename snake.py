@@ -46,7 +46,7 @@ class Snake(object):
         self.x = x + self.x_change
         self.y = y + self.y_change
 
-        if self.x < 20 or self.x > game.game_width-40 or self.y < 20 or self.y > game.game_height-40 or [self.x, self.y] in self.position:
+        if self.x < 20 or self.x > game.game_width-40 or self.y < 20 or self.y > game.game_height-40 or [self.x, self.y] in self.position or [self.x, self.y] in game.barrierPositions:
             game.crash = True
         eat(self, food, game)
 

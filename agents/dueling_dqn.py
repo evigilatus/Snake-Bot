@@ -34,28 +34,68 @@ class DuelingDQNAgent(object):
     def get_state(self, game, player, food):
 
         state = [
-            # danger straight
-            (player.x_change == 20 and player.y_change == 0 and ((list(map(add, player.position[-1], [20, 0])) in player.position) or
-            player.position[-1][0] + 20 >= (game.game_width - 20))) or (player.x_change == -20 and player.y_change == 0 and ((list(map(add, player.position[-1], [-20, 0])) in player.position) or
-            player.position[-1][0] - 20 < 20)) or (player.x_change == 0 and player.y_change == -20 and ((list(map(add, player.position[-1], [0, -20])) in player.position) or
-            player.position[-1][-1] - 20 < 20)) or (player.x_change == 0 and player.y_change == 20 and ((list(map(add, player.position[-1], [0, 20])) in player.position) or
-            player.position[-1][-1] + 20 >= (game.game_height-20))),
+            (player.x_change == 20 and player.y_change == 0 and (
+                    (list(map(add, player.position[-1], [20, 0])) in player.position) or
+                    player.position[-1][0] + 20 >= (game.game_width - 20) or
+                    (list(map(add, player.position[-1], [20, 0])) in game.barrierPositions)
+            )) or
+            (player.x_change == -20 and player.y_change == 0 and (
+                    (list(map(add, player.position[-1], [-20, 0])) in player.position) or
+                    player.position[-1][0] - 20 < 20 or
+                    (list(map(add, player.position[-1], [-20, 0])) in game.barrierPositions)
+            )) or
+            (player.x_change == 0 and player.y_change == -20 and (
+                    (list(map(add, player.position[-1], [0, -20])) in player.position) or
+                    player.position[-1][-1] - 20 < 20 or
+                    (list(map(add, player.position[-1], [0, -20])) in game.barrierPositions)
+            )) or
+            (player.x_change == 0 and player.y_change == 20 and (
+                    (list(map(add, player.position[-1], [0, 20])) in player.position) or
+                    player.position[-1][-1] + 20 >= (game.game_height-20) or
+                    (list(map(add, player.position[-1], [0, 20])) in game.barrierPositions)
+            )),  # danger straight
 
-            # danger right
-            (player.x_change == 0 and player.y_change == -20 and ((list(map(add,player.position[-1],[20, 0])) in player.position) or
-            player.position[ -1][0] + 20 > (game.game_width-20))) or (player.x_change == 0 and player.y_change == 20 and ((list(map(add,player.position[-1],
-            [-20,0])) in player.position) or player.position[-1][0] - 20 < 20)) or (player.x_change == -20 and player.y_change == 0 and ((list(map(
-            add,player.position[-1],[0,-20])) in player.position) or player.position[-1][-1] - 20 < 20)) or (player.x_change == 20 and player.y_change == 0 and (
-            (list(map(add,player.position[-1],[0,20])) in player.position) or player.position[-1][
-             -1] + 20 >= (game.game_height-20))),
+            (player.x_change == 0 and player.y_change == -20 and (
+                    (list(map(add,player.position[-1],[20, 0])) in player.position) or
+                    player.position[ -1][0] + 20 > (game.game_width-20) or
+                    (list(map(add, player.position[-1], [20, 0])) in game.barrierPositions)
+            )) or
+            (player.x_change == 0 and player.y_change == 20 and (
+                    (list(map(add,player.position[-1], [-20,0])) in player.position) or
+                    player.position[-1][0] - 20 < 20 or
+                    (list(map(add, player.position[-1], [-20, 0])) in game.barrierPositions)
+            )) or
+            (player.x_change == -20 and player.y_change == 0 and (
+                    (list(map(add ,player.position[-1],[0,-20])) in player.position) or
+                    player.position[-1][-1] - 20 < 20 or
+                    (list(map(add, player.position[-1], [0, -20])) in game.barrierPositions)
+            )) or
+            (player.x_change == 20 and player.y_change == 0 and (
+                    (list(map(add,player.position[-1],[0,20])) in player.position) or
+                    player.position[-1][-1] + 20 >= (game.game_height-20) or
+                    (list(map(add, player.position[-1], [-20, 0])) in game.barrierPositions)
+            )),  # danger right
 
-            # danger left
-             (player.x_change == 0 and player.y_change == 20 and ((list(map(add,player.position[-1],[20,0])) in player.position) or
-             player.position[-1][0] + 20 > (game.game_width-20))) or (player.x_change == 0 and player.y_change == -20 and ((list(map(
-             add, player.position[-1],[-20,0])) in player.position) or player.position[-1][0] - 20 < 20)) or (player.x_change == 20 and player.y_change == 0 and (
-            (list(map(add,player.position[-1],[0,-20])) in player.position) or player.position[-1][-1] - 20 < 20)) or (
-            player.x_change == -20 and player.y_change == 0 and ((list(map(add,player.position[-1],[0,20])) in player.position) or
-            player.position[-1][-1] + 20 >= (game.game_height-20))),
+            (player.x_change == 0 and player.y_change == 20 and (
+                    (list(map(add,player.position[-1],[20,0])) in player.position) or
+                    player.position[-1][0] + 20 > (game.game_width-20) or
+                    (list(map(add, player.position[-1], [20, 0])) in game.barrierPositions)
+            )) or
+            (player.x_change == 0 and player.y_change == -20 and (
+                    (list(map(add, player.position[-1],[-20,0])) in player.position) or
+                    player.position[-1][0] - 20 < 20 or
+                    (list(map(add, player.position[-1], [-20, 0])) in game.barrierPositions)
+            )) or
+            (player.x_change == 20 and player.y_change == 0 and (
+                    (list(map(add,player.position[-1],[0,-20])) in player.position) or
+                    player.position[-1][-1] - 20 < 20 or
+                    (list(map(add, player.position[-1], [0, -20])) in game.barrierPositions)
+            )) or
+            (player.x_change == -20 and player.y_change == 0 and (
+                    (list(map(add,player.position[-1],[0,20])) in player.position) or
+                    player.position[-1][-1] + 20 >= (game.game_height-20) or
+                    (list(map(add, player.position[-1], [0, 20])) in game.barrierPositions)
+            )), #danger left
 
 
             player.x_change == -20,  # move left
@@ -174,7 +214,7 @@ class DuelingDQNAgent(object):
         target_f[np.argmax(action)] = target
         self.model.fit({'state':np.array([state])}, {'value':value, 'advantages':target_f.reshape(1,3)}, epochs=1, verbose=0)
 
-    def run(self):
+    def run(self, game):
         pygame.init()
         counter_games = 0
         score_plot = []
@@ -182,7 +222,6 @@ class DuelingDQNAgent(object):
         record = 0
         while counter_games < 150:
             # Initialize classes
-            game = Game(440, 440)
             player1 = game.player
             food1 = game.food
 

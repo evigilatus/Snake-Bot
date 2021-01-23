@@ -30,7 +30,10 @@ def display_ui(game, score, record):
     game.gameDisplay.blit(text_highest, (190, 440))
     game.gameDisplay.blit(text_highest_number, (350, 440))
     game.gameDisplay.blit(game.bg, (10, 10))
-
+    
+    if game.barrierPositions:
+        for coord in game.barrierPositions:
+            game.gameDisplay.blit(game.barrierImage, (coord[0], coord[1]))
 
 def display(player, food, game, record):
     game.gameDisplay.fill((255, 255, 255))

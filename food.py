@@ -8,7 +8,7 @@ from utils.settings import game_settings
 class Food(object):
 
     def __init__(self):
-        self.x_food = 240
+        self.x_food = 220
         self.y_food = 200
         if game_settings['display_option']:
             self.image = pygame.image.load('game_modes/img/food2.png')
@@ -18,7 +18,7 @@ class Food(object):
         self.x_food = x_rand - x_rand % 20
         y_rand = randint(20, game.game_height - 40)
         self.y_food = y_rand - y_rand % 20
-        if [self.x_food, self.y_food] not in player.position:
+        if [self.x_food, self.y_food] not in player.position and [self.x_food, self.y_food] not in game.barrierPositions:
             return self.x_food, self.y_food
         else:
             self.food_coord(game,player)

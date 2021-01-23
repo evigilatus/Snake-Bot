@@ -1,6 +1,7 @@
 import click
 
 import pygame
+from game import Game
 from agents.dueling_dqn import DuelingDQNAgent
 from agents.experience_replay_dqn import ExperienceReplayDQNAgent
 from agents.double_dqn_periodic import DoubleDQNPeriodicAgent
@@ -21,9 +22,7 @@ from utils.settings import game_settings
 @click.option('--graphics', default=True, type=click.BOOL, help='Show UI')
 def main(algorithm, mode, graphics):
     init_graphics(graphics)
-
-    # TODO: Add wall/maze logic
-
+    
     if algorithm == 'experience_replay_dqn':
         agent = ExperienceReplayDQNAgent()
     elif algorithm == 'double_dqn':
@@ -33,8 +32,17 @@ def main(algorithm, mode, graphics):
     else:
         # TODO: Choose default agent
         agent = DuelingDQNAgent()
+    
+    mode_file = ''
+    
+    if mode == 'wall':
+        mode_file = 'game_modes/wall.json'
+    elif mode == 'maze':
+        mode_file = 'game_modes/maze.json'
+        
+    game = Game(440, 440, mode_file)
 
-    agent.run()
+    agent.run(game)
 
 
 def init_graphics(graphics):
