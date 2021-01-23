@@ -12,7 +12,7 @@ class Snake(object):
         self.position.append([self.x, self.y])
         self.food = 1
         self.eaten = False
-        self.image = pygame.image.load('game_modes/img/snakeBody.png')
+        self.image = pygame.image.load('./game_modes/img/snakeBody.png')
         self.x_change = 20
         self.y_change = 0
 

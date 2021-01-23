@@ -11,7 +11,7 @@ class Food(object):
         self.x_food = 220
         self.y_food = 200
         if game_settings['display_option']:
-            self.image = pygame.image.load('game_modes/img/food2.png')
+            self.image = pygame.image.load('./game_modes/img/food2.png')
 
     def food_coord(self, game, player):
         x_rand = randint(20, game.game_width - 40)

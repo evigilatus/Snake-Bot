@@ -1,3 +1,4 @@
+import h5py
 import pygame
 import seaborn as sns
 import numpy as np
@@ -58,6 +59,12 @@ def initialize_game(player, game, food, agent):
 
 def plot_seaborn(array_counter, array_score):
     sns.set(color_codes=True)
-    ax = sns.regplot(np.array([array_counter])[0], np.array([array_score])[0], color="b", x_jitter=.1, line_kws={'color':'green'})
+    ax = sns.regplot(x = np.array([array_counter])[0], y = np.array([array_score])[0])
     ax.set(xlabel='games', ylabel='score')
     plt.show()
+
+
+def load_previous_weights(filepath):
+    model = h5py.File(filepath, 'r')
+    print(list(model.keys()))
+# load_previous_weights('weights.hdf5')

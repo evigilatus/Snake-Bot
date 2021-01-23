@@ -15,7 +15,7 @@ class Game:
 
         if game_settings['display_option']:
             self.gameDisplay = pygame.display.set_mode((game_width, game_height+60))
-            self.bg = pygame.image.load("game_modes/img/background.png")
+            self.bg = pygame.image.load("./game_modes/img/background.png")
             self.barrierImage = pygame.image.load("game_modes/img/barrier.png")
 
         self.crash = False
@@ -23,7 +23,7 @@ class Game:
         self.food = Food()
         self.score = 0
         self.barrierPositions = []
-        
+
         if mode_file != '':
             with open(mode_file, 'r') as coordinates:
                 self.barrierPositions = json.load(coordinates)

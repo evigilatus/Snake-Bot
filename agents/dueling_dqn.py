@@ -26,7 +26,9 @@ class DuelingDQNAgent(object):
         self.value_model = self.value_network()
         self.advantage_model = self.advantage_network()
         self.model = self.network()
-        #self.model = self.network("weights.hdf5")
+        if game_settings['weights_path'] is not None:
+            print("Using pretrained network weights from {}", game_settings['weights_path'])
+            self.model.load_weights(game_settings['weights_path'])
         self.epsilon = 0
         self.actual = []
         self.memory = []
@@ -34,6 +36,7 @@ class DuelingDQNAgent(object):
     def get_state(self, game, player, food):
 
         state = [
+            # Danger straight
             (player.x_change == 20 and player.y_change == 0 and (
                     (list(map(add, player.position[-1], [20, 0])) in player.position) or
                     player.position[-1][0] + 20 >= (game.game_width - 20) or
@@ -53,8 +56,9 @@ class DuelingDQNAgent(object):
                     (list(map(add, player.position[-1], [0, 20])) in player.position) or
                     player.position[-1][-1] + 20 >= (game.game_height-20) or
                     (list(map(add, player.position[-1], [0, 20])) in game.barrierPositions)
-            )),  # danger straight
+            )),
 
+            # Danger right
             (player.x_change == 0 and player.y_change == -20 and (
                     (list(map(add,player.position[-1],[20, 0])) in player.position) or
                     player.position[ -1][0] + 20 > (game.game_width-20) or
@@ -74,8 +78,9 @@ class DuelingDQNAgent(object):
                     (list(map(add,player.position[-1],[0,20])) in player.position) or
                     player.position[-1][-1] + 20 >= (game.game_height-20) or
                     (list(map(add, player.position[-1], [-20, 0])) in game.barrierPositions)
-            )),  # danger right
+            )),
 
+            # Danger left
             (player.x_change == 0 and player.y_change == 20 and (
                     (list(map(add,player.position[-1],[20,0])) in player.position) or
                     player.position[-1][0] + 20 > (game.game_width-20) or
@@ -95,8 +100,7 @@ class DuelingDQNAgent(object):
                     (list(map(add,player.position[-1],[0,20])) in player.position) or
                     player.position[-1][-1] + 20 >= (game.game_height-20) or
                     (list(map(add, player.position[-1], [0, 20])) in game.barrierPositions)
-            )), #danger left
-
+            )),
 
             player.x_change == -20,  # move left
             player.x_change == 20,  # move right
@@ -268,5 +272,5 @@ class DuelingDQNAgent(object):
             score_plot.append(game.score)
             counter_plot.append(counter_games)
         plot_seaborn(counter_plot, score_plot)
-        self.model.save_weights('weights.hdf5')
+        self.model.save_weights('dueling-weights.hdf5')
         # files.download("weights.hdf5")
