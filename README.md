@@ -47,3 +47,5 @@ python main.py --algorithm=double_dqn mode=standard --no-graphics
 ```
 python main.py --algorithm=experience_replay_dqn mode=maze --graphics
 ```
+
+![Screenshot](images/modes.png)
